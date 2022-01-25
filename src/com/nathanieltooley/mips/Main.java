@@ -6,26 +6,38 @@ import java.nio.file.Paths;
 
 public class Main {
 
+    private static final int MAX_REGISTERS = 32;
+
+    public static int[] registers = new int[MAX_REGISTERS];
+
     public static void main(String[] args) {
         byte[] bytes = readBinaryFile(args[0]);
+        int memoryAddress = 96;
 
         String[] bytes32 = getBytesAs32Bits(bytes);
 
-        for (String word : bytes32){
+        for (String word : bytes32) {
             String[] sep = splitMipsCommand(word);
             printMipsCommand(sep);
+            System.out.print(memoryAddress);
+
+            if (sep[0].equals("0")) {
+                System.out.print(" Invalid Instruction");
+            }
+
             System.out.println();
+            memoryAddress += 4;
         }
 
 //        printBytesAs32Bits(bytes);
     }
 
-    public static byte[] readBinaryFile(String filename){
+    public static byte[] readBinaryFile(String filename) {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get(filename));
 
             return bytes;
-        } catch (IOException ex){
+        } catch (IOException ex) {
             System.out.println("Could not read file: " + filename);
             System.exit(-1);
         }
@@ -33,11 +45,11 @@ public class Main {
         return null;
     }
 
-    public static String getByteAsBinaryString(byte b){
+    public static String getByteAsBinaryString(byte b) {
         return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
     }
 
-    public static void printBytesAs32Bits(byte[] bytes){
+    public static void printBytesAs32Bits(byte[] bytes) {
         int j = 0;
         for (byte b : bytes) {
             if (j < 3) {
@@ -50,7 +62,7 @@ public class Main {
         }
     }
 
-    public static String[] getBytesAs32Bits(byte[] bytes){
+    public static String[] getBytesAs32Bits(byte[] bytes) {
         String[] bytes32 = new String[bytes.length / 4];
         String temp = "";
         int j = 0;
@@ -70,7 +82,7 @@ public class Main {
         return bytes32;
     }
 
-    public static String[] splitMipsCommand(String byteString){
+    public static String[] splitMipsCommand(String byteString) {
         String validInstruction = byteString.substring(0, 1);
         String opCode = byteString.substring(1, 6);
         String rs = byteString.substring(6, 11);
@@ -79,11 +91,11 @@ public class Main {
         String sa = byteString.substring(21, 26);
         String funct = byteString.substring(26, 32);
 
-        return new String[] {validInstruction, opCode, rs, rt, rd, sa, funct};
+        return new String[]{validInstruction, opCode, rs, rt, rd, sa, funct};
     }
 
-    public static void printMipsCommand(String[] mips){
-        for (String section: mips){
+    public static void printMipsCommand(String[] mips) {
+        for (String section : mips) {
             System.out.print(section + " ");
         }
     }

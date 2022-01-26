@@ -25,6 +25,11 @@ public class Main {
                 System.out.print(" Invalid Instruction");
             }
 
+            if ((sep[0] + sep[1]).equals("101000")) {
+                System.out.printf(" ADDI\t " + "R{0}" +  " R{1}");
+            }
+
+
             System.out.println();
             memoryAddress += 4;
         }
@@ -100,29 +105,30 @@ public class Main {
         }
     }
 
-//    public static Word[] createWordByteArray(byte[] bytes) {
-//        int j = 0;
-//        Word[] words;
-//        byte[] temp = new byte[4];
-//        for (byte b : bytes) {
-//            if (j < 4){
-//                temp[j] = b;
-//                j++;
-//            } else {
-//                Word w = new Word(temp);
-//            }
-//        }
-//    }
+    public class Instruction {
 
-//    public class Word {
-//
-//        public byte[] bytes;
-//
-//        public Word(byte[] bytes){
-//            this.bytes = bytes;
-//        }
-//
-//    }
+        public String binString;
+        public String[] sepStrings;
+
+        public int valid;
+        public int asInt;
+        public int asUint;
+        public int opcode;
+        public int rs;
+        public int rt;
+        public int rd;
+        public int sa;
+        public int shamt;
+        public int func;
+
+        public Instruction(String binString) {
+            this.binString = binString;
+            this.sepStrings = splitMipsCommand(binString);
+
+
+        }
+
+    }
 }
 
 

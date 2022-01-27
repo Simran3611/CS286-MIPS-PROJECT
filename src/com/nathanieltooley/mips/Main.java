@@ -25,8 +25,18 @@ public class Main {
                 System.out.print(" Invalid Instruction");
             }
 
-            if ((sep[0] + sep[1]).equals("101000")) {
-                System.out.printf(" ADDI\t " + "R{0}" +  " R{1}");
+//             if ((sep[0] + sep[1]).equals("101000")) {
+//                 System.out.printf(" ADDI\t " + "R{0}" +  " R{1}");
+//             }
+            else if ((sep[0] + sep[1]).equals("101000")) {
+                System.out.println(" ADDI\t " + "R" + sep['rt'] + " R" + sep['rs'] + "#" + sep['sa']);
+                //Not sure what element would have the number 10 in it? You could just use the convert to decimal function for this part with the right parameter.
+            }
+            else if ((sep[0] + sep[1]).equals("100000")) {
+                System.out.println(" SUB\t " + "R" + sep['rt'] + " R" + sep['rs'] + "R" + sep['sa']); //need to fix the last part
+            }
+            else if ((sep[0] + sep[1]).equals("101011")) {
+                System.out.println(" SW\t " + "R" + sep['rt'] + ", " + sep['rs'] + " (R" + sep['sa'] + ")"); //fix the immediate value
             }
 
 
@@ -36,6 +46,11 @@ public class Main {
 
 //        printBytesAs32Bits(bytes);
     }
+    public static int binToDec(String binstr) {
+         int dec = Integer.parseInt(binstr, 2);
+         return dec;
+    }
+
 
     public static byte[] readBinaryFile(String filename) {
         try {

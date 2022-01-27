@@ -48,7 +48,6 @@ public class Main {
     public static byte[] readBinaryFile(String filename) {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get(filename));
-
             return bytes;
         } catch (IOException ex) {
             System.out.println("Could not read file: " + filename);

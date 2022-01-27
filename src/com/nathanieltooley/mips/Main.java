@@ -4,8 +4,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static com.nathanieltooley.mips.Instruction.splitMipsCommand;
-
 public class Main {
 
     private static final int MAX_REGISTERS = 32;
@@ -24,7 +22,12 @@ public class Main {
             System.out.print(memoryAddress);
 
             if (inst.valid == 0) {
-                System.out.print(" Invalid Instruction");
+
+                if (memoryAddress == 96){
+                    System.out.print("  Invalid Instruction");
+                } else {
+                    System.out.print(" Invalid Instruction");
+                }
             }
             else if (inst.opcode == 40) {
                 System.out.printf(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd);

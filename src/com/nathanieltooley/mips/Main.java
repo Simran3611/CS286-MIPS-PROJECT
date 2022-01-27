@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static com.nathanieltooley.mips.Instruction.splitMipsCommand;
+
 public class Main {
 
     private static final int MAX_REGISTERS = 32;
@@ -17,26 +19,24 @@ public class Main {
         String[] bytes32 = getBytesAs32Bits(bytes);
 
         for (String word : bytes32) {
-            String[] sep = splitMipsCommand(word);
-            printMipsCommand(sep);
+            Instruction inst = new Instruction(word);
+            printMipsCommand(inst.sepStrings);
             System.out.print(memoryAddress);
 
-            if (sep[0].equals("0")) {
+            if (inst.valid == 0) {
                 System.out.print(" Invalid Instruction");
             }
-
-//             if ((sep[0] + sep[1]).equals("101000")) {
-//                 System.out.printf(" ADDI\t " + "R{0}" +  " R{1}");
-//             }
-            else if ((sep[0] + sep[1]).equals("101000")) {
-                System.out.println(" ADDI\t " + "R" + sep['rt'] + " R" + sep['rs'] + "#" + sep['sa']);
-                //Not sure what element would have the number 10 in it? You could just use the convert to decimal function for this part with the right parameter.
+            else if (inst.opcode == 40) {
+                System.out.printf(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd);
             }
-            else if ((sep[0] + sep[1]).equals("100000")) {
-                System.out.println(" SUB\t " + "R" + sep['rt'] + " R" + sep['rs'] + "R" + sep['sa']); //need to fix the last part
+            else if (inst.opcode == 43) {
+                System.out.printf(" SW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs);
             }
-            else if ((sep[0] + sep[1]).equals("101011")) {
-                System.out.println(" SW\t " + "R" + sep['rt'] + ", " + sep['rs'] + " (R" + sep['sa'] + ")"); //fix the immediate value
+            else if (inst.opcode == 32 && inst.func == 0) {
+                // SLL Command
+            }
+            else if (inst.opcode == 32 && inst.func == 34){
+                System.out.printf(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
             }
 
 
@@ -46,11 +46,10 @@ public class Main {
 
 //        printBytesAs32Bits(bytes);
     }
-    public static int binToDec(String binstr) {
-         int dec = Integer.parseInt(binstr, 2);
-         return dec;
-    }
 
+    public Instruction createInstruction(String binString){
+        return new Instruction(binString);
+    }
 
     public static byte[] readBinaryFile(String filename) {
         try {
@@ -102,47 +101,12 @@ public class Main {
         return bytes32;
     }
 
-    public static String[] splitMipsCommand(String byteString) {
-        String validInstruction = byteString.substring(0, 1);
-        String opCode = byteString.substring(1, 6);
-        String rs = byteString.substring(6, 11);
-        String rt = byteString.substring(11, 16);
-        String rd = byteString.substring(16, 21);
-        String sa = byteString.substring(21, 26);
-        String funct = byteString.substring(26, 32);
 
-        return new String[]{validInstruction, opCode, rs, rt, rd, sa, funct};
-    }
 
     public static void printMipsCommand(String[] mips) {
-        for (String section : mips) {
-            System.out.print(section + " ");
+        for (int i = 0; i < 7; i++) {
+            System.out.print(mips[i] + " ");
         }
-    }
-
-    public class Instruction {
-
-        public String binString;
-        public String[] sepStrings;
-
-        public int valid;
-        public int asInt;
-        public int asUint;
-        public int opcode;
-        public int rs;
-        public int rt;
-        public int rd;
-        public int sa;
-        public int shamt;
-        public int func;
-
-        public Instruction(String binString) {
-            this.binString = binString;
-            this.sepStrings = splitMipsCommand(binString);
-
-
-        }
-
     }
 }
 

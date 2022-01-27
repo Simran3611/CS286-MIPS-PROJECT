@@ -43,12 +43,6 @@ public class Main {
             System.out.println();
             memoryAddress += 4;
         }
-
-//        printBytesAs32Bits(bytes);
-    }
-
-    public Instruction createInstruction(String binString){
-        return new Instruction(binString);
     }
 
     public static byte[] readBinaryFile(String filename) {

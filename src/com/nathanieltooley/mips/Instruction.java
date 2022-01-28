@@ -15,12 +15,14 @@ public class Instruction {
     public int immd;
     public int j;
 
+    public OpCode opcodeType;
+
     public Instruction(String binString) {
         this.binString = binString;
         this.sepStrings = splitMipsCommand(binString);
 
         this.valid = binToDec(sepStrings[0]);
-        this.asInt = binToDec(binString);
+        this.asInt = binToDec(binString, true);
         this.opcode = binToDec(sepStrings[0] +sepStrings[1]);
         this.rs = binToDec(sepStrings[2]);
         this.rt = binToDec(sepStrings[3]);
@@ -75,5 +77,23 @@ public class Instruction {
         String j = byteString.substring(5);
 
         return new String[]{validInstruction, opCode, rs, rt, rd, sa, funct, immd, j};
+    }
+
+    public enum OpCode {
+        ADDI,
+        SW,
+        SLL,
+        LW,
+        SRL,
+        ADD,
+        SUB,
+        MUL,
+        MOVZ,
+        BREAK,
+        NOP,
+        JR,
+        J,
+        INVALID,
+        BLTZ,
     }
 }

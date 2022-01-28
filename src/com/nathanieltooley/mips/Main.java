@@ -32,7 +32,7 @@ public class Main {
             }
             else if (inst.opcode == 32 && inst.func == 0) {
                 // SLL Command
-                System.out.printf(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.immd);
+                System.out.printf(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa);
                 //SLL	R10, R1, #2
             }
             else if (inst.opcode == 32 && inst.func == 34){
@@ -44,11 +44,14 @@ public class Main {
             else if (inst.opcode == 35) {
                 System.out.printf(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs);
             }
-            else if (inst.opcode == 2) {
-                System.out.printf(" J  \t #%s", inst.immd);
+            else if (inst.opcode == 34) {
+                System.out.printf(" J  \t #%s", inst.j);
             }
-            else if (inst.opcode == 7) {
+            else if (inst.opcode == 33) {
                 System.out.printf(" BLTZ  \t R%s, #%s", inst.rs, inst.immd);
+            }
+            else if (inst.opcode == 32 && inst.func == 13){
+                System.out.printf(" BREAK");
             }
 
 

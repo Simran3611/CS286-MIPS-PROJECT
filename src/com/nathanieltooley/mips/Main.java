@@ -19,15 +19,10 @@ public class Main {
         for (String word : bytes32) {
             Instruction inst = new Instruction(word);
             printMipsCommand(inst.sepStrings);
-            System.out.print(memoryAddress);
+            System.out.printf(" %s\t", memoryAddress);
 
             if (inst.valid == 0) {
-
-                if (memoryAddress == 96){
-                    System.out.print("  Invalid Instruction");
-                } else {
-                    System.out.print(" Invalid Instruction");
-                }
+                System.out.print(" Invalid Instruction");
             }
             else if (inst.opcode == 40) {
                 System.out.printf(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd);
@@ -37,10 +32,28 @@ public class Main {
             }
             else if (inst.opcode == 32 && inst.func == 0) {
                 // SLL Command
+                System.out.printf(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa);
+                //SLL	R10, R1, #2
             }
             else if (inst.opcode == 32 && inst.func == 34){
                 System.out.printf(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
             }
+            else if (inst.opcode == 32 && inst.func == 32){
+                System.out.printf(" ADD \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
+            }
+            else if (inst.opcode == 35) {
+                System.out.printf(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs);
+            }
+            else if (inst.opcode == 34) {
+                System.out.printf(" J  \t #%s", inst.j);
+            }
+            else if (inst.opcode == 33) {
+                System.out.printf(" BLTZ  \t R%s, #%s", inst.rs, inst.immd);
+            }
+            else if (inst.opcode == 32 && inst.func == 13){
+                System.out.printf(" BREAK");
+            }
+
 
 
             System.out.println();

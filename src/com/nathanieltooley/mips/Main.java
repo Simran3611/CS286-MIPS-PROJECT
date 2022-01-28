@@ -19,15 +19,10 @@ public class Main {
         for (String word : bytes32) {
             Instruction inst = new Instruction(word);
             printMipsCommand(inst.sepStrings);
-            System.out.print(memoryAddress);
+            System.out.printf(" %s\t", memoryAddress);
 
             if (inst.valid == 0) {
-
-                if (memoryAddress == 96){
-                    System.out.print("  Invalid Instruction");
-                } else {
-                    System.out.print(" Invalid Instruction");
-                }
+                System.out.print(" Invalid Instruction");
             }
             else if (inst.opcode == 40) {
                 System.out.printf(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd);

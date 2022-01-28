@@ -28,7 +28,7 @@ public class Instruction {
         this.sa = binToDec(sepStrings[5]);
         this.func = binToDec(sepStrings[6]);
         this.immd = binToDec(sepStrings[7], true);
-        this.j = binToDec(sepStrings[8]);
+        this.j = binToDec(sepStrings[8]) << 2;
     }
 
     public static int binToDec(String binstr, boolean canBeNegative) {

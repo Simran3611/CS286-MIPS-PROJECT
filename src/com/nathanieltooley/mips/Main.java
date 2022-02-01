@@ -17,6 +17,7 @@ public class Main {
     public static ArrayList<Instruction> instructions = new ArrayList<>();
 
     public static void main(String[] args) {
+        // System.out.println(System.getProperty("user.dir"));
         byte[] bytes = readBinaryFile(args[0]);
         int memoryAddress = 96;
 
@@ -24,78 +25,87 @@ public class Main {
 
         boolean reachedBreak = false;
 
+        FileWriter fileWriter = getFileWriter(args[1]);
+
+        System.out.println("======================");
+        System.out.println("      Disassembly     ");
+        System.out.println("======================");
+
+        // first loop (disassembly)
         for (String word : bytes32) {
             if (reachedBreak){
                 int dataValue = Instruction.binToDec(word, true);
                 System.out.printf("%s\t    %s\t %s", word, memoryAddress, dataValue);
+                writeToFile(fileWriter, String.format("%s\t    %s\t %s", word, memoryAddress, dataValue));
 
                 data.put(memoryAddress, dataValue);
             } else {
                 Instruction inst = new Instruction(word);
-                printMipsCommand(inst.sepStrings);
-                System.out.printf(" %s\t", memoryAddress);
+
+                printAndWrite(fileWriter, createMipsCommandString(inst.sepStrings));
+                printAndWrite(fileWriter, String.format(" %s\t", memoryAddress));
 
                 if (inst.valid == 0) {
-                    System.out.print(" Invalid Instruction");
+                    printAndWrite(fileWriter, " Invalid Instruction");
                 }
                 // nop will look like this: 10000000 00000000 00000000 00000000 which equals the min integer value
                 else if (inst.asInt == Integer.MIN_VALUE){
-                    System.out.printf(" NOP");
+                    printAndWrite(fileWriter, " NOP");
                     inst.opcodeType = Instruction.OpCode.NOP;
                 }
                 else if (inst.opcode == 40) {
-                    System.out.printf(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd);
+                    printAndWrite(fileWriter, String.format(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd));
                     inst.opcodeType = Instruction.OpCode.ADDI;
                 }
                 else if (inst.opcode == 43) {
-                    System.out.printf(" SW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs);
+                    printAndWrite(fileWriter, String.format(" SW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
                     inst.opcodeType = Instruction.OpCode.SW;
                 }
                 else if (inst.opcode == 32 && inst.func == 0) {
                     // SLL Command
-                    System.out.printf(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa);
+                    printAndWrite(fileWriter, String.format(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
                     inst.opcodeType = Instruction.OpCode.SLL;
                     //SLL	R10, R1, #2
                 }
                 else if (inst.opcode == 32 && inst.func == 2){
-                    System.out.printf(" SRL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa);
+                    printAndWrite(fileWriter, String.format(" SRL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
                     inst.opcodeType = Instruction.OpCode.SRL;
                 }
                 else if (inst.opcode == 32 && inst.func == 34){
-                    System.out.printf(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
+                    printAndWrite(fileWriter, String.format(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     inst.opcodeType = Instruction.OpCode.SUB;
                 }
                 else if (inst.opcode == 32 && inst.func == 32){
-                    System.out.printf(" ADD \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
+                    printAndWrite(fileWriter, String.format(" ADD \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     inst.opcodeType = Instruction.OpCode.ADD;
                 }
                 else if (inst.opcode == 35) {
-                    System.out.printf(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs);
+                    printAndWrite(fileWriter, String.format(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
                     inst.opcodeType = Instruction.OpCode.LW;
                 }
                 else if (inst.opcode == 34) {
-                    System.out.printf(" J  \t #%s", inst.j);
+                    printAndWrite(fileWriter, String.format(" J  \t #%s", inst.j));
                     inst.opcodeType = Instruction.OpCode.J;
                 }
                 else if (inst.opcode == 33) {
-                    System.out.printf(" BLTZ\t R%s, #%s", inst.rs, inst.immd);
+                    printAndWrite(fileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
                     inst.opcodeType = Instruction.OpCode.BLTZ;
                 }
                 else if (inst.opcode == 32 && inst.func == 8){
-                    System.out.printf(" JR  \t R%s", inst.rs);
+                    printAndWrite(fileWriter, String.format(" JR  \t R%s", inst.rs));
                     inst.opcodeType = Instruction.OpCode.JR;
                 }
                 else if (inst.opcode == 32 && inst.func == 13){
-                    System.out.printf(" BREAK");
+                    printAndWrite(fileWriter," BREAK");
                     inst.opcodeType = Instruction.OpCode.BREAK;
                     reachedBreak = true;
                 }
                 else if (inst.opcode == 60){
-                    System.out.printf(" MUL \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt);
+                    printAndWrite(fileWriter, String.format(" MUL \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     inst.opcodeType = Instruction.OpCode.MUL;
                 }
                 else if (inst.opcode == 32 && inst.func == 10){
-                    System.out.printf(" MOVZ\t R%s, R%S, R%s", inst.rd, inst.rs, inst.rt);
+                    printAndWrite(fileWriter, String.format(" MOVZ\t R%s, R%S, R%s", inst.rd, inst.rs, inst.rt));
                     inst.opcodeType = Instruction.OpCode.MOVZ;
                 }
 
@@ -103,7 +113,20 @@ public class Main {
             }
 
             System.out.println();
+            writeToFile(fileWriter, "\n");
+
             memoryAddress += 4;
+        }
+
+        for (Instruction instruction: instructions){
+
+        }
+
+        try {
+            fileWriter.close();
+        } catch (IOException e){
+            System.out.println("Error closing file");
+            System.exit(-1);
         }
     }
 
@@ -117,6 +140,32 @@ public class Main {
         }
 
         return null;
+    }
+
+    public static FileWriter getFileWriter(String filename){
+        try {
+            FileWriter writer = new FileWriter(filename);
+            return writer;
+        } catch (IOException exception){
+            System.out.println("Could not create FileWriter for: " + filename);
+            System.exit(-1);
+        }
+
+        return null;
+    }
+
+    public static void writeToFile(FileWriter writer, String writeString){
+        try {
+            writer.write(writeString);
+        } catch (IOException exception){
+            System.out.println("Could not write string: " + writeString);
+            System.exit(-1);
+        }
+    }
+
+    public static void printAndWrite(FileWriter writer, String writeString){
+        System.out.print(writeString);
+        writeToFile(writer, writeString);
     }
 
     public static String getByteAsBinaryString(byte b) {
@@ -157,11 +206,13 @@ public class Main {
     }
 
 
-
-    public static void printMipsCommand(String[] mips) {
+    public static String createMipsCommandString(String[] mips) {
+        String temp = "";
         for (int i = 0; i < 7; i++) {
-            System.out.print(mips[i] + " ");
+            temp += (mips[i] + " ");
         }
+
+        return temp;
     }
 }
 

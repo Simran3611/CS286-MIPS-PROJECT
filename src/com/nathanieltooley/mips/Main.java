@@ -143,7 +143,7 @@ public class Main {
         int cycle = 1;
 
         // i is just for checking for infinite loops
-        int HARD_STOP_CYCLE_LIMIT = 500;
+        int HARD_STOP_CYCLE_LIMIT = 1000;
         int i = 0;
 
         while (!endLoop){
@@ -310,19 +310,6 @@ public class Main {
         return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
     }
 
-    public static void printBytesAs32Bits(byte[] bytes) {
-        int j = 0;
-        for (byte b : bytes) {
-            if (j < 3) {
-                System.out.print(getByteAsBinaryString(b));
-                j++;
-            } else {
-                System.out.println(getByteAsBinaryString(b));
-                j = 0;
-            }
-        }
-    }
-
     public static String[] getBytesAs32Bits(byte[] bytes) {
         String[] bytes32 = new String[bytes.length / 4];
         String temp = "";
@@ -343,7 +330,6 @@ public class Main {
         return bytes32;
     }
 
-
     public static String createMipsCommandString(String[] mips) {
         String temp = "";
         for (int i = 0; i < 7; i++) {
@@ -353,8 +339,6 @@ public class Main {
         return temp;
     }
 
-    // could maybe make it nicer later
-    // data string creation will have to be procedural
     public static String createRegisterString(){
         String temp = "";
 

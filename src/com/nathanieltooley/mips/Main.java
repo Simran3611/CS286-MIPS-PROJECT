@@ -358,22 +358,22 @@ public class Main {
     public static String createRegisterString(){
         String temp = "";
 
-        temp += String.format("r00:\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t\n",
+        temp += String.format("r00:\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
                 registers[0], registers[1], registers[2], registers[3],
                 registers[4], registers[5], registers[6], registers[7]
         );
 
-        temp += String.format("r08:\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t\n",
+        temp += String.format("r08:\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
                 registers[8], registers[9], registers[10], registers[11],
                 registers[12], registers[13], registers[14], registers[15]
         );
 
-        temp += String.format("r16:\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t\n",
+        temp += String.format("r16:\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
                 registers[16], registers[17], registers[18], registers[19],
                 registers[20], registers[21], registers[22], registers[23]
         );
 
-        temp += String.format("r24:\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t\n",
+        temp += String.format("r24:\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
                 registers[24], registers[25], registers[26], registers[27],
                 registers[28], registers[29], registers[30], registers[31]
         );

@@ -14,12 +14,14 @@ public class Instruction {
     public int func;
     public int immd;
     public int j;
+    public int memoryAddress;
 
     public OpCode opcodeType;
 
-    public Instruction(String binString) {
+    public Instruction(String binString, int memoryAddress) {
         this.binString = binString;
         this.sepStrings = splitMipsCommand(binString);
+        this.memoryAddress = memoryAddress;
 
         this.valid = binToDec(sepStrings[0]);
         this.asInt = binToDec(binString, true);
@@ -95,5 +97,6 @@ public class Instruction {
         J,
         INVALID,
         BLTZ,
+        ERROR
     }
 }

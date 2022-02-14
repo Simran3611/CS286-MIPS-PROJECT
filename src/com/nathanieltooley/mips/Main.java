@@ -18,15 +18,18 @@ public class Main {
     public static Map<Integer, Instruction> instructions = new HashMap<>();
 
     public static void main(String[] args) {
-        // System.out.println(System.getProperty("user.dir"));
-        byte[] bytes = readBinaryFile(args[0]);
+        // ARGS: -i, "filename.bin", -o, "out_name"
+        String inputFile = args[1];
+        String outputFilePrefix = args[3];
+
+        byte[] bytes = readBinaryFile(inputFile);
         int memoryAddress = 96;
 
         String[] bytes32 = getBytesAs32Bits(bytes);
 
         boolean reachedBreak = false;
 
-        FileWriter disFileWriter = getFileWriter(args[1]  + "_dis.txt");
+        FileWriter disFileWriter = getFileWriter(outputFilePrefix  + "_dis.txt");
 
         System.out.println("======================");
         System.out.println("      Disassembly     ");
@@ -134,7 +137,7 @@ public class Main {
         System.out.println("      Simulation      ");
         System.out.println("======================");
 
-        FileWriter simFileWriter = getFileWriter(args[1] + "_sim.txt");
+        FileWriter simFileWriter = getFileWriter(outputFilePrefix + "_sim.txt");
 
         boolean isJumping = false;
         boolean endLoop = false;

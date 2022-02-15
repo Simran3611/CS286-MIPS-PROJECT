@@ -168,74 +168,71 @@ public class Main {
             printAndWrite(simFileWriter, String.format("cycle: %s %s\t", cycle, inst.memoryAddress));
 
             switch (inst.opcodeType){
-                case ADD -> {
+                case ADD:
                     printAndWrite(simFileWriter, String.format(" ADD \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     registers[inst.rd] = registers[inst.rs] + registers[inst.rt];
-                }
-                case SUB -> {
+                    break;
+                case SUB:
                     printAndWrite(simFileWriter, String.format(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     registers[inst.rd] = registers[inst.rs] - registers[inst.rt];
-                }
-                case ADDI -> {
+                    break;
+                case ADDI:
                     printAndWrite(simFileWriter, String.format(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd));
                     registers[inst.rt] = registers[inst.rs] + inst.immd;
-                }
-                case SW -> {
+                    break;
+                case SW:
                     printAndWrite(simFileWriter, String.format(" SW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
                     // offset + base (in a register)
                     int dataAddress = inst.immd + registers[inst.rs];
                     data.replace(dataAddress, registers[inst.rt]);
-                }
-                case LW -> {
+                    break;
+                case LW:
                     printAndWrite(simFileWriter, String.format(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
-                    int dataAddress = inst.immd + registers[inst.rs];
-                    registers[inst.rt] = data.get(dataAddress);
-                }
-                case SLL -> {
+                    int lwDataAddress = inst.immd + registers[inst.rs];
+                    registers[inst.rt] = data.get(lwDataAddress);
+                    break;
+                case SLL:
                     printAndWrite(simFileWriter, String.format(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
                     registers[inst.rd] = registers[inst.rt] << inst.sa;
-                }
-                case SRL -> {
+                    break;
+                case SRL:
                     printAndWrite(simFileWriter, String.format(" SRL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
                     registers[inst.rd] = registers[inst.rt] >> inst.sa;
-                }
-                case J -> {
+                    break;
+                case J:
                     printAndWrite(simFileWriter, String.format(" J  \t #%s", inst.j));
                     isJumping = true;
                     simMemoryAddress = inst.j;
-                }
-                case JR -> {
+                    break;
+                case JR:
                     printAndWrite(simFileWriter, String.format(" JR  \t R%s", inst.rs));
                     isJumping = true;
                     simMemoryAddress = registers[inst.rs];
-                }
-                case MUL -> {
+                    break;
+                case MUL:
                     printAndWrite(simFileWriter, String.format(" MUL \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
                     registers[inst.rd] = registers[inst.rs] * registers[inst.rt];
-                }
-                case BLTZ -> {
-                    // by the looks of it, this command jumps to a memory address if the number in the register is negative
-                    // the way to find this address is such:
-                    // (currentAddress + 4)[basically the next address] + (offset)[immd value]
+                    break;
+                case BLTZ:
                     printAndWrite(simFileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
                     if (registers[inst.rs] < 0){
                         isJumping = true;
                         simMemoryAddress = (simMemoryAddress + 4) + inst.immd;
                     }
-                }
-                case MOVZ -> {
+                    break;
+                case MOVZ:
                     printAndWrite(simFileWriter, String.format(" MOVZ\t R%s, R%S, R%s", inst.rd, inst.rs, inst.rt));
                     if (registers[inst.rt] == 0){
                         registers[inst.rd] = registers[inst.rs];
                     }
-                }
-                case NOP -> {
+                    break;
+                case NOP:
                     printAndWrite(simFileWriter," NOP");
-                }
-                case BREAK -> {
+                    break;
+                case BREAK:
                     printAndWrite(simFileWriter," BREAK");
                     endLoop = true;
-                }
+                    break;
             }
 
             printAndWrite(simFileWriter, "\n");

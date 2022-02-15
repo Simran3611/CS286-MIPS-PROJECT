@@ -1,4 +1,4 @@
-package com.nathanieltooley.mips;
+package mipsproject;
 
 public class Instruction {
     public String binString;

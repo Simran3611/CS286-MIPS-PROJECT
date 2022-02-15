@@ -1,4 +1,4 @@
-package mipsproject;
+
 
 public class Instruction {
     public String binString;
@@ -16,7 +16,7 @@ public class Instruction {
     public int j;
     public int memoryAddress;
 
-    public OpCode opcodeType;
+    public Opcode opcodeType;
 
     public Instruction(String binString, int memoryAddress) {
         this.binString = binString;
@@ -79,24 +79,5 @@ public class Instruction {
         String j = byteString.substring(5);
 
         return new String[]{validInstruction, opCode, rs, rt, rd, sa, funct, immd, j};
-    }
-
-    public enum OpCode {
-        ADDI,
-        SW,
-        SLL,
-        LW,
-        SRL,
-        ADD,
-        SUB,
-        MUL,
-        MOVZ,
-        BREAK,
-        NOP,
-        JR,
-        J,
-        INVALID,
-        BLTZ,
-        ERROR
     }
 }

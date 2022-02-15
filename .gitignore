@@ -1,6 +1,4 @@
-/.idea/
-/out/
-
-*.iml
-*.txt
-
+*.class
+*.zip
+*.jar
+real*.txt

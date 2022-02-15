@@ -1,5 +1,3 @@
-package mipsproject;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -58,67 +56,67 @@ public class Main {
                 // nop will look like this: 10000000 00000000 00000000 00000000 which equals the min integer value
                 else if (inst.asInt == Integer.MIN_VALUE){
                     printAndWrite(disFileWriter, " NOP");
-                    inst.opcodeType = Instruction.OpCode.NOP;
+                    inst.opcodeType = Opcode.NOP;
                 }
                 else if (inst.opcode == 40) {
                     printAndWrite(disFileWriter, String.format(" ADDI\t R%s, R%s, #%s", inst.rt, inst.rs, inst.immd));
-                    inst.opcodeType = Instruction.OpCode.ADDI;
+                    inst.opcodeType = Opcode.ADDI;
                 }
                 else if (inst.opcode == 43) {
                     printAndWrite(disFileWriter, String.format(" SW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
-                    inst.opcodeType = Instruction.OpCode.SW;
+                    inst.opcodeType = Opcode.SW;
                 }
                 else if (inst.opcode == 32 && inst.func == 0) {
                     // SLL Command
                     printAndWrite(disFileWriter, String.format(" SLL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
-                    inst.opcodeType = Instruction.OpCode.SLL;
+                    inst.opcodeType = Opcode.SLL;
                     //SLL	R10, R1, #2
                 }
                 else if (inst.opcode == 32 && inst.func == 2){
                     printAndWrite(disFileWriter, String.format(" SRL\t R%s, R%s, #%s", inst.rd, inst.rt, inst.sa));
-                    inst.opcodeType = Instruction.OpCode.SRL;
+                    inst.opcodeType = Opcode.SRL;
                 }
                 else if (inst.opcode == 32 && inst.func == 34){
                     printAndWrite(disFileWriter, String.format(" SUB \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
-                    inst.opcodeType = Instruction.OpCode.SUB;
+                    inst.opcodeType = Opcode.SUB;
                 }
                 else if (inst.opcode == 32 && inst.func == 32){
                     printAndWrite(disFileWriter, String.format(" ADD \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
-                    inst.opcodeType = Instruction.OpCode.ADD;
+                    inst.opcodeType = Opcode.ADD;
                 }
                 else if (inst.opcode == 35) {
                     printAndWrite(disFileWriter, String.format(" LW  \t R%s, %s(R%s)", inst.rt, inst.immd, inst.rs));
-                    inst.opcodeType = Instruction.OpCode.LW;
+                    inst.opcodeType = Opcode.LW;
                 }
                 else if (inst.opcode == 34) {
                     printAndWrite(disFileWriter, String.format(" J  \t #%s", inst.j));
-                    inst.opcodeType = Instruction.OpCode.J;
+                    inst.opcodeType = Opcode.J;
                 }
                 else if (inst.opcode == 33) {
-                    printAndWrite(disFileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
                     inst.immd = inst.immd << 2;
-                    inst.opcodeType = Instruction.OpCode.BLTZ;
+                    printAndWrite(disFileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
+                    inst.opcodeType = Opcode.BLTZ;
                 }
                 else if (inst.opcode == 32 && inst.func == 8){
                     printAndWrite(disFileWriter, String.format(" JR  \t R%s", inst.rs));
-                    inst.opcodeType = Instruction.OpCode.JR;
+                    inst.opcodeType = Opcode.JR;
                 }
                 else if (inst.opcode == 32 && inst.func == 13){
                     printAndWrite(disFileWriter," BREAK");
-                    inst.opcodeType = Instruction.OpCode.BREAK;
+                    inst.opcodeType = Opcode.BREAK;
                     reachedBreak = true;
                 }
                 else if (inst.opcode == 60){
                     printAndWrite(disFileWriter, String.format(" MUL \t R%s, R%s, R%s", inst.rd, inst.rs, inst.rt));
-                    inst.opcodeType = Instruction.OpCode.MUL;
+                    inst.opcodeType = Opcode.MUL;
                 }
                 else if (inst.opcode == 32 && inst.func == 10){
                     printAndWrite(disFileWriter, String.format(" MOVZ\t R%s, R%S, R%s", inst.rd, inst.rs, inst.rt));
-                    inst.opcodeType = Instruction.OpCode.MOVZ;
+                    inst.opcodeType = Opcode.MOVZ;
                 }
 
                 if (inst.opcodeType == null){
-                    inst.opcodeType = Instruction.OpCode.ERROR;
+                    inst.opcodeType = Opcode.ERROR;
                 }
 
                 if (!isInvalid){
@@ -244,6 +242,8 @@ public class Main {
             printAndWrite(simFileWriter, "data:");
             printAndWrite(simFileWriter, createDataString());
             printAndWrite(simFileWriter, "\n");
+
+
 
             cycle++;
             i++;

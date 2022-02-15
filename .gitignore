@@ -1,2 +1,4 @@
 *.class
 *.zip
+*.jar
+real*.txt

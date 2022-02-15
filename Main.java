@@ -93,8 +93,8 @@ public class Main {
                     inst.opcodeType = Opcode.J;
                 }
                 else if (inst.opcode == 33) {
-                    printAndWrite(disFileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
                     inst.immd = inst.immd << 2;
+                    printAndWrite(disFileWriter, String.format(" BLTZ\t R%s, #%s", inst.rs, inst.immd));
                     inst.opcodeType = Opcode.BLTZ;
                 }
                 else if (inst.opcode == 32 && inst.func == 8){

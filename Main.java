@@ -242,6 +242,8 @@ public class Main {
             printAndWrite(simFileWriter, "data:");
             printAndWrite(simFileWriter, createDataString());
             printAndWrite(simFileWriter, "\n");
+            printAndWrite(simFileWriter, "\n");
+
 
             cycle++;
             i++;
